@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Assignment 1</title>
+  <style>
+  .center{
+    text-align: center;
+  }
+  table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+  }
+  th, td {
+    padding: 12px;
+    width: 50%;
+  }
+  th {
+    background-color: #b3e493;
+    color: rgb(31, 71, 20);
+  }
+  td {
+    border-bottom: 1px solid #82b46a;
+  }
+  h1 {
+    margin-bottom: 20px;
+  }
+  body {
+    background-color:#ffffff;
+    font-family: 'Trebuchet MS', sans-serif;
+    color:rgb(31, 71, 20)
+  }
+    </style>
+</head>
+<body>
+   <div class="center">
+
+      <h1> Singapore 2-Hour Weather Forecast</h1>
+        <p id="update-time"></p>
+
+    <script>
+          fetch('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast')
+        .then(response => response.json())
+        .then(data => {
+            let rows = data.items[0].forecasts;
+    
+            let results = rows.filter(d => d.area);
+    
+            let timestamp = data.items[0].update_timestamp;
+            document.getElementById('update-time').textContent = "Last updated on: " + new Date(timestamp).toLocaleString();
+          
+            console.log(results);
+            console.log(timestamp);
+                    
+            // creating the table
+            const table = document.createElement('table');
+
+            const headerRow = document.createElement('tr');
+
+            const areaHeader = document.createElement('th');
+            areaHeader.textContent = 'Area';
+
+            const forecastHeader = document.createElement('th');
+            forecastHeader.textContent = 'Forecast';
+            
+            headerRow.appendChild(areaHeader)
+            headerRow.appendChild(forecastHeader);
+            table.appendChild(headerRow);
+
+            //fetching data from the results to the table
+            results.forEach(forecast => {
+              const row = document.createElement('tr');
+
+              const areaCell = document.createElement('td');
+              areaCell.textContent = forecast.area;
+              row.appendChild(areaCell);
+
+              const forecastCell = document.createElement('td');
+              forecastCell.textContent = forecast.forecast;
+              row.appendChild(forecastCell);
+
+              if (forecast.forecast === "Fair") {
+                    forecastCell.textContent = forecast.forecast + " ☀️";
+                } else if (forecast.forecast === "Fair (Day)") {
+                  forecastCell.textContent = forecast.forecast +  " 🌞";
+                } else if (forecast.forecast === "Fair (Night)") {
+                   forecastCell.textContent = forecast.forecast + " 🌙";
+                } else if (forecast.forecast === "Fair and Warm") {
+                  forecastCell.textContent = forecast.forecast + " 🌤️";
+                } else if (forecast.forecast === "Partly Cloudy") {
+                  forecastCell.textContent = forecast.forecast + " 🌤️";
+                } else if (forecast.forecast === "Partly Cloudy (Day)") {
+                  forecastCell.textContent = forecast.forecast + " 🌤️";
+                } else if (forecast.forecast === "Partly Cloudy (Night)") {
+                  forecastCell.textContent = forecast.forecast + " ☁️";
+                } else if (forecast.forecast === "Cloudy") {
+                  forecastCell.textContent = forecast.forecast + " ☁️";
+                } else if (forecast.forecast === "Hazy") {
+                  forecastCell.textContent = forecast.forecast + " 🌫️";
+                } else if (forecast.forecast === "Slightly Hazy") {
+                  forecastCell.textContent = forecast.forecast + " 🌫️";
+                } else if (forecast.forecast === "Windy") {
+                  forecastCell.textContent = forecast.forecast + " 💨";
+                } else if (forecast.forecast === "Mist") {
+                  forecastCell.textContent = forecast.forecast + " 🌫️";
+                } else if (forecast.forecast === "Fog") {
+                  forecastCell.textContent = forecast.forecast + " 🌁";
+                } else if (forecast.forecast === "Light Rain") {
+                  forecastCell.textContent = forecast.forecast + " 🌧️";
+                } else if (forecast.forecast === "Moderate Rain") {
+                  forecastCell.textContent = forecast.forecast + " 🌧️";
+                } else if (forecast.forecast === "Heavy Rain") {
+                  forecastCell.textContent = forecast.forecast + " ⛈️";
+                } else if (forecast.forecast === "Passing Showers") {
+                  forecastCell.textContent = forecast.forecast + " 🌦️";
+                } else if (forecast.forecast === "Light Showers") {
+                  forecastCell.textContent = forecast.forecast + " 🌦️";
+                } else if (forecast.forecast === "Showers") {
+                  forecastCell.textContent = forecast.forecast + " 🌧️";
+                } else if (forecast.forecast === "Heavy Showers") {
+                  forecastCell.textContent = forecast.forecast + " ⛈️";
+                } else if (forecast.forecast === "Thundery Showers") {
+                  forecastCell.textContent = forecast.forecast + " ⛈️⚡";
+                } else if (forecast.forecast === "Heavy Thundery Showers") {
+                  forecastCell.textContent = forecast.forecast + " ⛈️⚡";
+                } else if (forecast.forecast === "Heavy Thundery Showers with Gusty Winds") {
+                  forecastCell.textContent = forecast.forecast + " ⛈️💨⚡";
+                } else {
+                  forecastCell.textContent = forecast.forecast + "";
+                }
+
+              table.appendChild(row);
+            });
+
+            document.body.appendChild(table);
+
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    </script>
+  </div>
+</body>
+</html>
